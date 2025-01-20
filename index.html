@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Diary Log</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>My Study Diary</h1>
+        <form id="diary-form">
+            <br>
+            <label for="log-date">Date:</label>
+            <input type="date" id="log-date">
+            <br>
+            <label for="theme-entry">Theme:</label>
+            <textarea id="theme-entry" placeholder="Theme of your study today..." required></textarea>
+            <br>
+            <label for="study-time">Time Spent (hours):</label>
+            <input type="number" id="study-time" placeholder="Enter time in hours" step="any" required>
+            <br>
+            <label for="diary-entry">Diary Entry:</label>
+            <textarea id="diary-entry" placeholder="Write your study progress here..." required class="tall-input"></textarea>
+            <br><br>
+
+            <button type="submit">Log Entry</button>
+        </form>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
