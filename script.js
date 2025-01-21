@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Check if the response was successful
             if (response.ok) {
-                alert('Diary entry logged successfully!');
+                alert('Diary logged, keep it going!');
                 form.reset(); // Optionally reset the form after successful submission
             } else {
                 alert('Failed to log diary entry. Please try again.');
