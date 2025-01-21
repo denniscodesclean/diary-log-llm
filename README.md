@@ -6,7 +6,7 @@
   -   Future Study Plan Suggestion (Next Topic Suggestion)
 ## Workflow Overview
   - **Input**: A app takes free-text as input;
-  - **Data Storage**: Input triggers the first AWS Lambda (1) to transform it to structure data, store in [PlaceHolder].
+  - **Data Storage**: Input triggers the first AWS Lambda (1) to transform it to structure data, store in AWS S3 (As of 2025.1.20).
   - **LLM Trigger Threshold**: On-demand or on schedule (X logs detected, or X days passed), trigger second Lambda (2).
   - **LLM**: Use API call in Lambda (2), with dynamic prompt.
 
