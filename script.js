@@ -16,37 +16,37 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Prepare the data object to send in the POST request
         const formData = {
-            "userId" : userId,
-            "logDate": logDate,
-            "themeEntry": themeEntry,
-            "studyTime": studyTime,
-            "diaryEntry": diaryEntry
+            userId : userId,
+            logDate: logDate,
+            themeEntry: themeEntry,
+            studyTime: studyTime,
+            diaryEntry: diaryEntry
         };
 
+        // Add console.log to check the formData before sending
+        console.log('Form data being sent:', formData);
+
+
         try {
+            // Send the form data to the API Gateway using a POST request
             const response = await fetch('https://sbci9hda6b.execute-api.us-east-2.amazonaws.com/submit-form', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json', // Ensure data is sent as JSON
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify(formData) // Convert form data to JSON string
             });
-        
-            console.log('Response:', response); // Log response for debugging
-        
+
+            // Check if the response was successful
             if (response.ok) {
-                const result = await response.json();
-                console.log('Result:', result);
                 alert('Diary entry logged successfully!');
-                form.reset();
+                form.reset(); // Optionally reset the form after successful submission
             } else {
-                console.error('Error response:', response);
                 alert('Failed to log diary entry. Please try again.');
             }
         } catch (error) {
-            console.error('Error:', error); // Log detailed error
+            console.error('Error submitting form:', error);
             alert('An error occurred while submitting the form.');
         }
-        
     });
 });
