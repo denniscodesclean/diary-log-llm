@@ -3,19 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Study Diary Log</title>
+    <title>My Study Diary</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
+    <div class="page-title">
+         <h1> 🍈</h1>
+    </div>
     <div class="container">
         <h1>My Study Diary</h1>
-        <form id="diary-form">
+        <form id="diary-form" action="https://sbci9hda6b.execute-api.us-east-2.amazonaws.com/submit-form">
+            <br>
+            <label for="user-id">User Name:</label>
+            <textarea id="user-id" placeholder="Enter your unique username..." required class="short-input"></textarea>
             <br>
             <label for="log-date">Date:</label>
             <input type="date" id="log-date">
             <br>
             <label for="theme-entry">Theme:</label>
-            <textarea id="theme-entry" placeholder="Theme of your study today..." required></textarea>
+            <textarea id="theme-entry" placeholder="Theme of your study today..." required class="short-input"></textarea>
             <br>
             <label for="study-time">Time Spent (hours):</label>
             <input type="number" id="study-time" placeholder="Enter time in hours" step="any" required>

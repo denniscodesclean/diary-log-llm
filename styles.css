@@ -7,13 +7,22 @@
 
 /* Body styles */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
+    font-family: Arial, Serif;
+    background-color: #FFFAF0;
     color: #333;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
+}
+
+/* Title above the container */
+.page-title {
+    text-align: center; /* Center the title */
+    font-size: 1.5em; /*  font size */
+    color: #333; /* Dark text color */
+    margin-bottom: 5px; /* Space between title and container */
 }
 
 /* Container for the form */
@@ -28,7 +37,13 @@ body {
 /* Specific size for diary entry textarea */
 .tall-input {
     width: 100%;  /* Make the textarea take full width of the container */
-    height: 150px; /* Set height for the textarea */
+    height: 125px; /* Set height for the textarea */
+}
+
+/* Specific size for diary entry textarea */
+.short-input {
+    width: 100%;  /* Make the textarea take full width of the container */
+    height: 35px; /* Set height for the textarea */
 }
 
 /* Form styles */
@@ -52,7 +67,7 @@ input, textarea {
 button {
     margin-top: 15px;
     padding: 10px;
-    background-color: #98D696;
+    background-color: #6EBF61;
     color: white;
     border: none;
     border-radius: 10px;
@@ -60,5 +75,5 @@ button {
 }
 
 button:hover {
-    background-color: #88BF86;
+    background-color: #57964C;
 }
