@@ -28,7 +28,8 @@
 | user_01 | project_02 | 2025-01-19 13:21:00 | [PlaceHolder] | [PlaceHolder] | I started a project to create a LLM-based study log appilcation, here is my plan... |
 
 
-# Diary Retrieval Mechanism
+# Data Pipelines
+User --> API Gateway --> Lambda 1 --> S3 --> AWS Glue --> AWS Athena --> LLM
 
 # Integrate LLM for Simple Analysis
 
