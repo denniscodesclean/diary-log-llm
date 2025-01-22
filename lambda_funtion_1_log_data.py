@@ -31,25 +31,27 @@ def lambda_handler(event, context):
             "diaryEntry": body.get('diaryEntry', '')
         }
 
-        # Try append new entry to S3
         try:
             # Check if the file exists for the user in the bucket
             response = s3_client.get_object(Bucket=bucket_name, Key=object_key)
-            existing_entries = json.loads(response['Body'].read().decode('utf-8'))
+            existing_entries = response['Body'].read().decode('utf-8').strip().split('\n')
+            
+            # Append the new entry as a new line in the NDJSON format
+            s3_client.put_object(
+                Bucket=bucket_name,
+                Key=object_key,
+                Body='\n'.join(existing_entries + [json.dumps(new_entry)]),  # Append new record on a new line
+                ContentType='application/json'
+            )
+
         except s3_client.exceptions.NoSuchKey:
-            # If no file exists, create a new list.
-            existing_entries = []
-
-        # Append new entry to the existing entries
-        existing_entries.append(new_entry)
-
-        # Write the updated entries back to S3
-        s3_client.put_object(
-            Bucket=bucket_name,
-            Key=object_key,
-            Body=json.dumps(existing_entries, indent=4),
-            ContentType='application/json'
-        )
+            # If the file doesn't exist, create a new file with the first entry (no array brackets)
+            s3_client.put_object(
+                Bucket=bucket_name,
+                Key=object_key,
+                Body=json.dumps(new_entry) + '\n',  # if does not exist, create a single dictionary
+                ContentType='application/json'
+            )
 
         print("new_entry content:", json.dumps(new_entry))
     
