@@ -8,32 +8,68 @@
 </head>
 
 <body>
-    <div class="page-title">
-         <h1> 🍈</h1>
+    <!-- Landing Page -->
+    <div class="landing-page">
+        <div class="landing-container">
+            <h1>🍈 Welcome to My Study Diary 🍈</h1>
+            <form id="username-form">
+                <label for="username">Enter Your Username:</label>
+                <textarea id="username" placeholder="Enter your unique username..." required class="short-input"></textarea>
+                <br><br>
+                <button type="submit">Enter</button>
+            </form>
+        </div>
     </div>
-    <div class="container">
-        <h1>My Study Diary</h1>
-        <form id="diary-form">
-            <br>
-            <label for="user-id">User Name:</label>
-            <textarea id="user-id" placeholder="Enter your unique username..." required class="short-input"></textarea>
-            <br>
-            <label for="log-date">Date:</label>
-            <input type="date" id="log-date">
-            <br>
-            <label for="theme-entry">Theme:</label>
-            <textarea id="theme-entry" placeholder="Theme of your study today..." required class="short-input"></textarea>
-            <br>
-            <label for="study-time">Time Spent (hours):</label>
-            <input type="number" id="study-time" placeholder="Enter time in hours" step="any" required>
-            <br>
-            <label for="diary-entry">Diary Entry:</label>
-            <textarea id="diary-entry" placeholder="Write your study progress here..." required class="tall-input"></textarea>
-            <br><br>
 
-            <button type="submit">Log Entry</button>
-        </form>
+    <!-- Main Page -->
+    <div class="main-page" style="display: none;">
+        <div class="main-content">
+            <!-- Main Diary Submission Container -->
+            <div class="container">
+                <h1>My Study Diary</h1>
+                <form id="diary-form">
+                    <label for="user-id">User Name:</label>
+                    <textarea id="user-id" placeholder="Enter your unique username..." required class="short-input"></textarea>
+                    <br>
+                    <label for="log-date">Date:</label>
+                    <input type="date" id="log-date">
+                    <br>
+                    <label for="theme-entry">Theme:</label>
+                    <textarea id="theme-entry" placeholder="Theme of your study today..." required class="short-input"></textarea>
+                    <br>
+                    <label for="study-time">Time Spent (hours):</label>
+                    <input type="number" id="study-time" placeholder="Enter time in hours" step="any" required>
+                    <br>
+                    <label for="diary-entry">Diary Entry:</label>
+                    <textarea id="diary-entry" placeholder="Write your study progress here..." required class="tall-input"></textarea>
+                    <br><br>
+                    <button type="submit">Log Entry</button>
+                </form>
+            </div>
+
+            <!-- Additional Features Container with Tabs -->
+            <div class="features-container">
+                <div class="tabs">
+                    <button id="past-entries-tab">View Past Entries</button>
+                    <button id="llm-analysis-tab">LLM Analysis</button>
+                </div>
+                <div class="content-sections">
+                    <div id="past-entries" class="content-section">
+                        <h2>Your Past Entries</h2>
+                        <!-- Past entries content here -->
+                    </div>
+                    <div id="llm-analysis" class="content-section">
+                        <h2>LLM Analysis</h2>
+                        <!-- LLM analysis content here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Back to Landing Page Button -->
+            <button id="back-to-landing" class="back-button">Return to Login</button>
+        </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
