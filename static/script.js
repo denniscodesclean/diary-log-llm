@@ -1,12 +1,12 @@
 // Firebase Configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyDaAcEICKkV77fbFDxpE6qQG40PmukTfXQ",
-    authDomain: "diary-llm-delin.firebaseapp.com",
+    apiKey: "API-KET",
+    authDomain: "DOMAIN",
     projectId: "diary-llm-delin",
-    storageBucket: "diary-llm-delin.firebasestorage.app",
-    messagingSenderId: "878916064976",
-    appId: "1:878916064976:web:f74d829e8cd7490179b0d5",
-    measurementId: "G-N5Y38Y31JN"
+    storageBucket: "BUCKET",
+    messagingSenderId: "ID",
+    appId: "ID",
+    measurementId: "ID"
 };
 
 // Initialize Firebase
