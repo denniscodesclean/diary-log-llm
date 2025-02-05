@@ -1,22 +1,43 @@
+"""
+Callout: Now call LLM separately for diff user. Would be good use case for on-demand require from individual users.
+If want to do for batch users (say provide summary to all users once a week)
+    1. include system prompt to avoid repeat tokens
+    2. do batch call
+    3. save all user insights
+    4. send individual results to individual users.
+"""
 import boto3
 import json
 from botocore.exceptions import ClientError
 
-# Create a Bedrock Runtime client in the AWS Region of your choice.
-client = boto3.client("bedrock-runtime", region_name="us-east-2")
+# Create AWS Clients
+s3_client = boto3.client("s3")
+bedrock_client = boto3.client("bedrock-runtime", region_name="us-east-2")
+
+#S3 Bucket
+bucket_name = 'diary-log'
 
 # Inference Profile ARN - Replace with the ARN of your inference profile for Claude 3 Haiku.
 model_id = "arn:aws:bedrock:us-east-2:324037274971:inference-profile/us.anthropic.claude-3-haiku-20240307-v1:0"
+#model_id = "arn:aws:sagemaker:us-east-2:aws:hub-content/SageMakerPublicHub/Model/deepseek-llm-r1/2.0.1"
 
 def lambda_handler(event, context):
     try:
-        # Extract diary entries from the event
-        diary_entries = event.get("diary_entries", [])
-        if not diary_entries:
-            return {
-                'statusCode': 400,
-                'body': json.dumps('No diary entries provided')
-            }
+        # read body from event
+        if isinstance(event.get('body'), str):
+            body = json.loads(event.get('body', '{}'))
+        else:
+            body = event.get('body', {})
+
+        # read from s3
+        user_id = body.get('userId', 'unknown') 
+        object_key = f"user-data/user_id={user_id}.json"
+        response = s3_client.get_object(Bucket=bucket_name, Key=object_key)
+        file_content = response['Body'].read().decode('utf-8')  
+        
+        # Parse several json objects separated by new line to a list
+        entries = file_content.split('\n')
+        diary_entries = [json.loads(entry) for entry in entries if entry.strip()]
 
         # System and User Prompts
         system_prompt = """
@@ -69,7 +90,7 @@ def lambda_handler(event, context):
         }
 
         # Invoke the model
-        response = client.invoke_model(
+        response = bedrock_client.invoke_model(
             modelId=model_id,
             body=json.dumps(model_input),
             accept="application/json",
@@ -93,3 +114,42 @@ def lambda_handler(event, context):
             'statusCode': 500,
             'body': json.dumps(f"Error processing request: {str(e)}")
         }
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        return {
+            'statusCode': 500,
+            'body': json.dumps(f"Error processing request: {str(e)}")
+        }
+
+"""
+TEST CASE:
+{
+  "resource": "/{proxy+}",
+  "path": "/path/to/resource",
+  "httpMethod": "POST",
+  "headers": {
+    "Accept": "*/*",
+    "Content-Type": "application/json",
+    "x-amzn-trace-id": "Root=1-xx-xx",
+    "User-Agent": "Amazon APIGateway aws-sdk-java/1.11.940 Linux/4.9.0-15-amd64 OpenJDK_64-Bit_Server_VM/25.212-b12"
+  },
+  "queryStringParameters": null,
+  "pathParameters": null,
+  "stageVariables": null,
+  "requestContext": {
+    "resourceId": "xx",
+    "resourcePath": "/{proxy+}",
+    "httpMethod": "POST",
+    "requestId": "xx",
+    "requestTime": "xx",
+    "path": "/path/to/resource",
+    "accountId": "xx",
+    "apiId": "xx",
+    "identity": {
+      "sourceIp": "xx"
+    }
+  },
+  "body": "{\"userId\":\"jaja\"}",
+  "isBase64Encoded": false
+}
+"""
