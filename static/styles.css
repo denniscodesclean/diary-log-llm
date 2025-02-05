@@ -1,11 +1,9 @@
-/* Basic reset */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Body styles */
 body {
     font-family: Arial, Serif;
     background-color: #FFFAF0;
@@ -17,13 +15,13 @@ body {
     height: 100vh;
 }
 
-/* Landing Page */
 .landing-page {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     background-color: #FFFAF0;
+    width: 100%;
 }
 
 .landing-container {
@@ -31,18 +29,63 @@ body {
     padding: 40px;
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    width: 800px;  /* Increased width to accommodate the title */
+    width: 750px;
     text-align: center;
     font-size: 1.2em;
 }
 
 .landing-container h1 {
-    font-size: 2.2em;
+    font-size: 1.8em;
     margin-bottom: 20px;
-    white-space: nowrap;
 }
 
-/* Input fields and buttons on the landing page */
+.auth-forms {
+    position: relative;
+    margin-top: 20px;
+}
+
+.auth-form {
+    background-color: #FFFAF0;
+    padding: 20px;
+    border-radius: 8px;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.auth-form.hidden {
+    display: none;
+}
+
+.auth-form h2 {
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 1.5em;
+}
+
+.auth-form input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.auth-toggle {
+    margin-top: 15px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.auth-toggle a {
+    color: #6EBF61;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.auth-toggle a:hover {
+    text-decoration: underline;
+}
+
 .short-input {
     width: 100%;
     height: 35px;
@@ -60,19 +103,18 @@ button {
     border: none;
     border-radius: 10px;
     cursor: pointer;
+    width: 100%;
 }
 
 button:hover {
     background-color: #57964C;
 }
 
-/* Main Page */
 .main-page {
     display: none;
     width: 100%;
 }
 
-/* Main content styles */
 .main-content {
     display: flex;
     justify-content: center;
@@ -81,11 +123,36 @@ button:hover {
     flex-wrap: wrap;
     max-width: 1200px;
     margin: 0 auto;
-    position: relative;  /* Added for absolute positioning of back button */
-    padding-bottom: 60px;  /* Added space for the back button */
+    position: relative;
+    padding-bottom: 60px;
 }
 
-/* Main Diary Container */
+.user-info {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    z-index: 1000;
+}
+
+#user-email {
+    font-weight: bold;
+    color: #333;
+}
+
+#logout-btn {
+    background-color: #dc3545;
+    padding: 8px 16px;
+    width: auto;
+    margin: 0;  /* Remove default button margin */
+}
+
+#logout-btn:hover {
+    background-color: #c82333;
+}
+
 .container {
     background-color: #FFCAA1;
     padding: 30px;
@@ -93,18 +160,17 @@ button:hover {
     width: 700px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin-right: 20px;
-    min-height: 600px;  /* Set minimum height */
+    min-height: 600px;
 }
 
-/* Tabs for Additional Features */
 .features-container {
     background-color: #FFCAA1;
     padding: 20px;
     border-radius: 10px;
     width: 400px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    min-height: 662px;  /* Match height with main container */
-    font-family: Arial, Serif;  /* Match font with main container */
+    min-height: 662px;
+    font-family: Arial, Serif;
 }
 
 .tabs {
@@ -139,13 +205,11 @@ button:hover {
     display: block;
 }
 
-/* Form Styling */
 form {
     display: flex;
     flex-direction: column;
 }
 
-/* Label and input field styles */
 label {
     font-weight: bold;
 }
@@ -160,21 +224,4 @@ input, textarea {
 .tall-input {
     width: 100%;
     height: 150px;
-}
-
-/* Back button styling */
-.back-button {
-    position: absolute;
-    bottom: 1px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #808080;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.back-button:hover {
-    background-color: #666666;
 }
