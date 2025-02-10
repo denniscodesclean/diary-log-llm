@@ -126,4 +126,52 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('llm-analysis').classList.add('active');
         document.getElementById('past-entries').classList.remove('active');
     });
+
+    // Fetch and display past entries when the "View Past Entries" button is clicked
+    document.getElementById('past-entries-tab').addEventListener('click', async function() {
+        const user = auth.currentUser;
+        if (!user) {
+            alert('Please login first');
+            return;
+        }
+
+        try {
+            const response = await fetch(`https://sbci9hda6b.execute-api.us-east-2.amazonaws.com/get_entries?userId=${user.uid}`,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                mode: 'cors'
+            });
+            if (response.ok) {
+                const data = await response.json();
+                const entriesContainer = document.getElementById('past-entries');
+                entriesContainer.innerHTML = '<h2>Your Past Entries</h2>'; // Clear previous content
+
+                if ((data.length > 0)) {
+                    data.forEach(entry => {
+                        const entryDiv = document.createElement('div');
+                        entryDiv.classList.add('entry');
+                        entryDiv.innerHTML = `
+                            <p><strong>Date:</strong> ${entry.logDate}</p>
+                            <p><strong>Theme:</strong> ${entry.themeEntry}</p>
+                            <p><strong>Time Spent:</strong> ${entry.studyTime} hours</p>
+                            <p><strong>Diary Entry:</strong> ${entry.diaryEntry}</p>
+                        `;
+                        entriesContainer.appendChild(entryDiv);
+                    });
+                    
+                } else {
+                    entriesContainer.innerHTML += '<p>No past entries found.</p>';
+                }
+            } else {
+                console.error('Error fetching past entries:', response);
+                alert('Failed to retrieve past entries.');
+            }
+        } catch (error) {
+            console.error('Error fetching past entries:', error);
+            alert('Error fetching past entries.');
+        }
+    });
 });

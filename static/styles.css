@@ -161,6 +161,7 @@ button:hover {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin-right: 20px;
     min-height: 600px;
+    max-height: 600px;
 }
 
 .features-container {
@@ -169,7 +170,8 @@ button:hover {
     border-radius: 10px;
     width: 400px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    min-height: 662px;
+    min-height: 600px;
+    max-height: 600px;
     font-family: Arial, Serif;
 }
 
@@ -225,3 +227,35 @@ input, textarea {
     width: 100%;
     height: 150px;
 }
+
+.entries-container {
+    height: 400px; /*  Fixed height for scrollability */
+    overflow-y: auto; /*  Enables scrolling */
+    border: 1px solid #ddd;
+    padding: 10px;
+    background: #fff;
+    width: 90%;
+    max-width: 400px; /*  Prevents excessive width */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    word-wrap: break-word; /*  Ensures long words wrap */
+    overflow-wrap: break-word; /*  Forces wrapping */
+    white-space: normal; /*  Allows multiline wrapping */
+}
+
+/* Individual entries */
+.entry {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    max-width: 100%; /*  Prevents text from extending beyond container */
+    overflow: hidden; /*  Ensures no unintended overflow */
+    word-wrap: break-word; /*  Breaks long words properly */
+    overflow-wrap: anywhere; /*  Forces text to break even inside words */
+    white-space: normal; /*  Ensures full wrapping */
+    text-align: left;
+    background: #FFE4C4; /* Light peach background */
+    padding: 10px;
+    border-radius: 5px;
+}
+
