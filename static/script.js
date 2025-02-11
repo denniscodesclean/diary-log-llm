@@ -9,6 +9,7 @@ const firebaseConfig = {
     measurementId: "ID"
 };
 
+
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
@@ -174,4 +175,101 @@ document.addEventListener('DOMContentLoaded', function () {
             alert('Error fetching past entries.');
         }
     });
+
+    document.getElementById('llm-analysis-tab').addEventListener('click', async function() {
+        const user = auth.currentUser;
+        if (!user) {
+            alert('Please login first');
+            return;
+        }
+    
+        try {
+            const response = await fetch(`https://sbci9hda6b.execute-api.us-east-2.amazonaws.com/llm_call?userId=${user.uid}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                mode: 'cors'
+            });
+    
+            if (response.ok) {
+                try {
+                    const data = await response.json();
+    
+                    console.log('Parsed data:', data);
+    
+                    const insightsContainer = document.getElementById('llm-analysis');
+                    insightsContainer.innerHTML = '<h2>AI-Generated Insights</h2>';
+    
+                    const sections = [];
+    
+                    if (data.field_of_study) {
+                        sections.push(`
+                            <h3>Field of Study:</h3>
+                            <p>${data.field_of_study}</p>
+                        `);
+                    }
+    
+                    if (data.progress_summary) {
+                        sections.push(`
+                            <h3>Progress Summary:</h3>
+                            <p><strong>Total Hours Studied:</strong> ${data.progress_summary.total_hours_studied}</p>
+                            <p><strong>Total Sessions:</strong> ${data.progress_summary.total_sessions}</p>
+                            <p>${data.progress_summary.summary}</p>
+                        `);
+                    }
+    
+                    if (data.review_suggestions) {
+                        let reviewHtml = `<h3>Review Suggestions:</h3>`;
+    
+                        if (data.review_suggestions.key_concepts) {
+                            reviewHtml += `<h4>Key Concepts:</h4><ul>`;
+                            for (const [concept, definition] of Object.entries(data.review_suggestions.key_concepts)) {
+                                reviewHtml += `<li><strong>${concept}:</strong> ${definition}</li>`;
+                            }
+                            reviewHtml += `</ul>`;
+                        }
+    
+                        if (data.review_suggestions.questions) {
+                            reviewHtml += `<h4>Questions to Review:</h4><ul>`;
+                            data.review_suggestions.questions.forEach(question => {
+                                reviewHtml += `<li>${question}</li>`;
+                            });
+                            reviewHtml += `</ul>`;
+                        }
+    
+                        sections.push(reviewHtml);
+                    }
+    
+                    if (data.next_study_topic_suggestion) {
+                        sections.push(`
+                            <h3>Next Study Topic Suggestion:</h3>
+                            <p>${data.next_study_topic_suggestion}</p>
+                        `);
+                    }
+    
+                    if (sections.length > 0) {
+                        insightsContainer.innerHTML += sections.join('');
+                    } else {
+                        insightsContainer.innerHTML += '<p>No insights available.</p>';
+                    }
+    
+                } catch (jsonError) {
+                    console.error('Error parsing JSON:', jsonError);
+                    console.error('Response text:', await response.text()); // Log the raw response for debugging
+                    alert('Error parsing AI-generated insights. Check the console for details.');
+                }
+    
+            } else {
+                console.error('Error fetching AI-generated insights:', response);
+                alert('Failed to retrieve AI-generated insights.');
+            }
+        } catch (error) {
+            console.error('Error fetching AI-generated insights:', error);
+            alert('Error fetching AI-generated insights. Please check the console for details.');
+        }
+    });
+    
+    
+
 });

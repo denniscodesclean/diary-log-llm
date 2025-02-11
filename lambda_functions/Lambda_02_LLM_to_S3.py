@@ -24,19 +24,17 @@ model_id = "arn:aws:bedrock:us-east-2:324037274971:inference-profile/us.anthropi
 def lambda_handler(event, context):
     try:
         # read body from event
-        if isinstance(event.get('body'), str):
-            body = json.loads(event.get('body', '{}'))
-        else:
-            body = event.get('body', {})
+        user_id = event.get('queryStringParameters', {}).get('userId', 'unknown')
+        print(f"Extracted user_id: {user_id}")
 
         # read from s3
-        user_id = body.get('userId', 'unknown') 
         object_key = f"user-data/user_id={user_id}.json"
         response = s3_client.get_object(Bucket=bucket_name, Key=object_key)
-        file_content = response['Body'].read().decode('utf-8')  
+        file_content = response['Body'].read().decode('utf-8')  # Decode the file content
         
-        # Parse several json objects separated by new line to a list
+        # parse several json objects separated by new line to a list
         entries = file_content.split('\n')
+        # Parse each JSON object and collect the entries in a list
         diary_entries = [json.loads(entry) for entry in entries if entry.strip()]
 
         # System and User Prompts
@@ -49,7 +47,7 @@ def lambda_handler(event, context):
             """
         user_prompt = """
             Below are users study diary.
-            Process the diary independently and provide an analysis based on the following JSON structure. 
+            Process the diary and provide an analysis direcly using the following JSON structure. 
 
             **JSON Structure**:
             {
@@ -85,8 +83,8 @@ def lambda_handler(event, context):
                 #{"role": "system", "content": system_prompt},
                 {"role": "user", "content": final_user_prompt},
             ],
-            "max_tokens": 512,
-            "temperature": 0.7,
+            "max_tokens": 1000,
+            "temperature": 1.0,
         }
 
         # Invoke the model
@@ -101,11 +99,18 @@ def lambda_handler(event, context):
         response_body = response["body"].read().decode("utf-8")  # Read and decode the StreamingBody
         model_response = json.loads(response_body)  # Parse JSON content
         output_text = model_response["content"][0]["text"]
-    
+        
 
         return {
             'statusCode': 200,
-            'body': output_text
+            "headers": {"Content-Type": "application/json"},
+            'body': output_text,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type"            
+            }
         }
 
     except Exception as e:
@@ -120,6 +125,8 @@ def lambda_handler(event, context):
             'statusCode': 500,
             'body': json.dumps(f"Error processing request: {str(e)}")
         }
+
+
 
 """
 TEST CASE:
