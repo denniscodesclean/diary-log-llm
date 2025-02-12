@@ -17,9 +17,11 @@ bedrock_client = boto3.client("bedrock-runtime", region_name="us-east-2")
 #S3 Bucket
 bucket_name = 'diary-log'
 
-# Inference Profile ARN - Replace with the ARN of your inference profile for Claude 3 Haiku.
+# Inference Profile ARN - Haiku 3 is the fastest
 model_id = "arn:aws:bedrock:us-east-2:324037274971:inference-profile/us.anthropic.claude-3-haiku-20240307-v1:0"
 #model_id = "arn:aws:sagemaker:us-east-2:aws:hub-content/SageMakerPublicHub/Model/deepseek-llm-r1/2.0.1"
+#model_id = "arn:aws:bedrock:us-east-2:324037274971:inference-profile/us.anthropic.claude-3-5-haiku-20241022-v1:0"
+#model_id = "arn:aws:bedrock:us-east-2:324037274971:inference-profile/us.anthropic.claude-3-5-sonnet-20240620-v1:0"
 
 def lambda_handler(event, context):
     try:
@@ -41,39 +43,42 @@ def lambda_handler(event, context):
         system_prompt = """
             You are a helpful and friendly study tutor. 
             Your role is to analyze study diaries and provide actionable feedback to improve users' study efficiency. 
-            Speak in an encouraging and exciting tone to motivate users to keep studying. 
+            Always speak in an encouraging and exciting tone, acknowledge user's achivement and efforts, motivate users to keep studying. 
             Always ensure the analysis is user-specific and does not mix data between users.
-            Respond in the same language as the input diary.
+            IMPORTANT: Respond in the same language as the main langauge used in input diary.
+            If the diary is in Chinese, respond in Chinese. If in Spanish, respond in Spanish. Do NOT respond in English if the diary is not in English.
+
+
             """
-        user_prompt = """
-            Below are users study diary.
-            Process the diary and provide an analysis direcly using the following JSON structure. 
 
-            **JSON Structure**:
-            {
-                "user_id": user id,
-                "field_of_study": summary the field of study in 10 words,
-                "progress_summary": {
-                    "total_hours_studied": Sum of studyTime,
-                    "total_sessions": Count of entries,
-                    "summary": Provide a summary of progress for all entries. Use direct, conversational language, starting with 'You'.
-                },
-                "review_suggestions": {
-                    "key_concepts": Provide key concepts for review with brief definition,
-                    "questions": Provide 2 questions for review.
-                },
-                "next_study_topic_suggestion": Suggest the next topic to study and briefly explain how it relates to the user's progress. Use direct, conversational language, starting with 'You'.
-            }
+        user_prompt = f"""
+         <instructions>
+        Process the diary provided below and provide an analysis directly using the following JSON structure.
+        Ensure the JSON output strictly adheres to the structure provided, do not include any openning text outside of JSON.
+        </instructions>       
 
-            **Instructions**:
-            - Ensure the JSON output strictly adheres to the structure provided.
-            - Do not let data from one user influence another.
-            - Provide one JSON object per user.
+        <JSON Structure>
+        {{
+            "user_id": user id,
+            "field_of_study": "Summarize the field of study in 10 words",
+            "progress_summary": {{
+                "total_hours_studied": "Sum of studyTime",
+                "total_sessions": "Count of entries",
+                "summary": "Provide a summary of progress for all entries. Use direct, conversational language, starting with 'You'."
+            }},
+            "review_suggestions": {{
+                "key_concepts": "Provide key concepts for review with brief definitions",
+                "questions": "Provide 2 questions for review."
+            }},
+            "next_study_topic_suggestion": "Suggest the next topic to study and briefly explain how it relates to the user's progress. Use direct, conversational language, starting with 'You'."
+        }}
+        </JSON Structure>
 
-            **Diary**:
-            """ 
-
-        final_user_prompt = user_prompt + json.dumps(diary_entries)
+        Below is user's diary:
+        <diary>
+        {json.dumps(diary_entries)}
+        </diary>
+        """
 
         # Construct the request payload
         model_input = {
@@ -81,10 +86,10 @@ def lambda_handler(event, context):
             "system": system_prompt,
             "messages": [
                 #{"role": "system", "content": system_prompt},
-                {"role": "user", "content": final_user_prompt},
+                {"role": "user", "content": user_prompt},
             ],
-            "max_tokens": 1000,
-            "temperature": 1.0,
+            "max_tokens": 2000,
+            "temperature": 0.8,
         }
 
         # Invoke the model
@@ -125,6 +130,7 @@ def lambda_handler(event, context):
             'statusCode': 500,
             'body': json.dumps(f"Error processing request: {str(e)}")
         }
+
 
 
 
