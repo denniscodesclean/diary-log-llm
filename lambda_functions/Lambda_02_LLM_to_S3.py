@@ -6,6 +6,7 @@ If want to do for batch users (say provide summary to all users once a week)
     3. save all user insights
     4. send individual results to individual users.
 """
+
 import boto3
 import json
 from botocore.exceptions import ClientError
@@ -47,8 +48,6 @@ def lambda_handler(event, context):
             Always ensure the analysis is user-specific and does not mix data between users.
             IMPORTANT: Respond in the same language as the main langauge used in input diary.
             If the diary is in Chinese, respond in Chinese. If in Spanish, respond in Spanish. Do NOT respond in English if the diary is not in English.
-
-
             """
 
         user_prompt = f"""
@@ -67,8 +66,8 @@ def lambda_handler(event, context):
                 "summary": "Provide a summary of progress for all entries. Use direct, conversational language, starting with 'You'."
             }},
             "review_suggestions": {{
-                "key_concepts": "Provide key concepts for review with brief definitions",
-                "questions": "Provide 2 questions for review."
+                "key_concepts": "Provide key concepts for review with brief definitions in this single json value",
+                "questions": "Provide 2 questions for review in this single json value"
             }},
             "next_study_topic_suggestion": "Suggest the next topic to study and briefly explain how it relates to the user's progress. Use direct, conversational language, starting with 'You'."
         }}
@@ -104,7 +103,7 @@ def lambda_handler(event, context):
         response_body = response["body"].read().decode("utf-8")  # Read and decode the StreamingBody
         model_response = json.loads(response_body)  # Parse JSON content
         output_text = model_response["content"][0]["text"]
-        
+        print(output_text)
 
         return {
             'statusCode': 200,
@@ -130,7 +129,6 @@ def lambda_handler(event, context):
             'statusCode': 500,
             'body': json.dumps(f"Error processing request: {str(e)}")
         }
-
 
 
 

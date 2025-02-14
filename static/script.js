@@ -9,7 +9,6 @@ const firebaseConfig = {
     measurementId: "ID"
 };
 
-
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
@@ -148,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (response.ok) {
                 const data = await response.json();
                 const entriesContainer = document.getElementById('past-entries');
-                entriesContainer.innerHTML = '<h2>Your Past Entries</h2>'; // Clear previous content
+                entriesContainer.innerHTML = '<h3>Your Past Entries</h3>'; // Clear previous content
 
                 if ((data.length > 0)) {
                     data.forEach(entry => {
@@ -199,7 +198,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     console.log('Parsed data:', data);
     
                     const insightsContainer = document.getElementById('llm-analysis');
-                    insightsContainer.innerHTML = '<h2>AI-Generated Insights</h2>';
+                    insightsContainer.innerHTML = '<h3>Study Log Feedback</h3>';
     
                     const sections = [];
     
@@ -221,21 +220,15 @@ document.addEventListener('DOMContentLoaded', function () {
     
                     if (data.review_suggestions) {
                         let reviewHtml = `<h3>Review Suggestions:</h3>`;
-    
+                    
                         if (data.review_suggestions.key_concepts) {
-                            reviewHtml += `<h4>Key Concepts:</h4><ul>`;
-                            for (const [concept, definition] of Object.entries(data.review_suggestions.key_concepts)) {
-                                reviewHtml += `<li><strong>${concept}:</strong> ${definition}</li>`;
-                            }
-                            reviewHtml += `</ul>`;
+                            reviewHtml += `<h4>Key Concepts:</h4>`;
+                            reviewHtml += `<p>${data.review_suggestions.key_concepts}</p>`;
                         }
-    
+                    
                         if (data.review_suggestions.questions) {
-                            reviewHtml += `<h4>Questions to Review:</h4><ul>`;
-                            data.review_suggestions.questions.forEach(question => {
-                                reviewHtml += `<li>${question}</li>`;
-                            });
-                            reviewHtml += `</ul>`;
+                            reviewHtml += `<h4>Questions to Review:</h4>`;
+                            reviewHtml += `<p>${data.review_suggestions.questions}</p>`;
                         }
     
                         sections.push(reviewHtml);
