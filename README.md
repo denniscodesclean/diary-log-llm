@@ -1,9 +1,14 @@
-# Project Overview
-## Main Function
-- Users write diary about their study progress, the app will generate insights including:
+# Project Description
+https://diary-log.s3.us-east-2.amazonaws.com/index.html
+
+This web app is designed to serve as a study buddy. It's designed for users to keep track of the progress for their school work, projects, self-study journey...
+In the form of diary, users can log their study plan, achievements at each stage, obstacles they ran into and so on. The app will provide feedback aim to help users track their progress systematically, provide recap, and suggestion for next step.
+
+So far the insights including:
   -   Progress Summary
-  -   Review Mechanism (pop-up quiz / flash cards)
+  -   Review Mechanism (maybe pop-up quiz / flash cards in the future?)
   -   Future Study Plan Suggestion (Next Topic Suggestion)
+    
 ## Workflow Overview
   - **Input**: A app takes free-text as input;
   - **Data Storage**: Input triggers the first AWS Lambda (1) to transform it to structure data, store in AWS S3 (As of 2025.1.20).
