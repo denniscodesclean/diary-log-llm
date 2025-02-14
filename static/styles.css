@@ -197,6 +197,12 @@ button:hover {
 
 .content-sections {
     margin-top: 20px;
+    max-width: 100%;  /* Ensure it doesn't exceed the container */
+    word-wrap: break-word; /* Break long words */
+    overflow-wrap: break-word; /* Ensure wrapping */
+    white-space: normal; /* Allow text to wrap */
+    overflow-y: auto; /* Add scroll if needed */
+    max-height: 400px; /* Adjust based on your layout */
 }
 
 .content-section {
@@ -228,34 +234,5 @@ input, textarea {
     height: 150px;
 }
 
-.entries-container {
-    height: 400px; /*  Fixed height for scrollability */
-    overflow-y: auto; /*  Enables scrolling */
-    border: 1px solid #ddd;
-    padding: 10px;
-    background: #fff;
-    width: 90%;
-    max-width: 400px; /*  Prevents excessive width */
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    word-wrap: break-word; /*  Ensures long words wrap */
-    overflow-wrap: break-word; /*  Forces wrapping */
-    white-space: normal; /*  Allows multiline wrapping */
-}
 
-/* Individual entries */
-.entry {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    max-width: 100%; /*  Prevents text from extending beyond container */
-    overflow: hidden; /*  Ensures no unintended overflow */
-    word-wrap: break-word; /*  Breaks long words properly */
-    overflow-wrap: anywhere; /*  Forces text to break even inside words */
-    white-space: normal; /*  Ensures full wrapping */
-    text-align: left;
-    background: #FFE4C4; /* Light peach background */
-    padding: 10px;
-    border-radius: 5px;
-}
 
