@@ -182,6 +182,14 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
     
+        const insightsContainer = document.getElementById('llm-analysis');
+    
+        // Show "Study Log Feedback" heading with a loading message
+        insightsContainer.innerHTML = `
+            <h3>Study Log Feedback</h3>
+            <p>Loading Insights... Please wait :)</p>
+        `;
+    
         try {
             const response = await fetch(`https://sbci9hda6b.execute-api.us-east-2.amazonaws.com/llm_call?userId=${user.uid}`, {
                 method: 'GET',
@@ -197,10 +205,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
                     console.log('Parsed data:', data);
     
-                    const insightsContainer = document.getElementById('llm-analysis');
-                    insightsContainer.innerHTML = '<h3>Study Log Feedback</h3>';
-    
-                    const sections = [];
+                    let sections = [];
     
                     if (data.field_of_study) {
                         sections.push(`
@@ -220,12 +225,12 @@ document.addEventListener('DOMContentLoaded', function () {
     
                     if (data.review_suggestions) {
                         let reviewHtml = `<h3>Review Suggestions:</h3>`;
-                    
+    
                         if (data.review_suggestions.key_concepts) {
                             reviewHtml += `<h4>Key Concepts:</h4>`;
                             reviewHtml += `<p>${data.review_suggestions.key_concepts}</p>`;
                         }
-                    
+    
                         if (data.review_suggestions.questions) {
                             reviewHtml += `<h4>Questions to Review:</h4>`;
                             reviewHtml += `<p>${data.review_suggestions.questions}</p>`;
@@ -241,25 +246,34 @@ document.addEventListener('DOMContentLoaded', function () {
                         `);
                     }
     
-                    if (sections.length > 0) {
-                        insightsContainer.innerHTML += sections.join('');
-                    } else {
-                        insightsContainer.innerHTML += '<p>No insights available.</p>';
-                    }
+                    // Keep the heading and update the content
+                    insightsContainer.innerHTML = `
+                        <h3>Study Log Feedback</h3>
+                        ${sections.length > 0 ? sections.join('') : '<p>No insights available.</p>'}
+                    `;
     
                 } catch (jsonError) {
                     console.error('Error parsing JSON:', jsonError);
-                    console.error('Response text:', await response.text()); // Log the raw response for debugging
-                    alert('Error parsing AI-generated insights. Check the console for details.');
+                    console.error('Response text:', await response.text());
+                    insightsContainer.innerHTML = `
+                        <h3>Study Log Feedback</h3>
+                        <p>Error parsing AI-generated insights. Please try again.</p>
+                    `;
                 }
     
             } else {
                 console.error('Error fetching AI-generated insights:', response);
-                alert('Failed to retrieve AI-generated insights.');
+                insightsContainer.innerHTML = `
+                    <h3>Study Log Feedback</h3>
+                    <p>Failed to retrieve AI-generated insights. Please try again.</p>
+                `;
             }
         } catch (error) {
             console.error('Error fetching AI-generated insights:', error);
-            alert('Error fetching AI-generated insights. Please check the console for details.');
+            insightsContainer.innerHTML = `
+                <h3>Study Log Feedback</h3>
+                <p>Error fetching AI-generated insights. Please check the console for details.</p>
+            `;
         }
     });
     
