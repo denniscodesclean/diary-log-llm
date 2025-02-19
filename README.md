@@ -26,6 +26,8 @@ So far the insights including:
 | All | 1 | X | Include 'Date Range' in QueryParameters when sending GET request to call LLM to support filtering on entries by entry time. |
 | All | 1 | X | Support deleting previous entries. |
 | Front | 2 | X | Adjust layout for mobile. |
+| Safety | 2 | X | Restrict bad actors from abusing API calls - set a throttling limit per user / add email verification during sign up. |
+| Safety | 2 | X | Test prompt injection, jail breaking, and potential inappropriate output regarding to user entries. |
 | LLM | 2 | X | Explore Bedrock Prompt Mamangement, to manage prompt and model selection. |
 | Back | 2 | X | Explore RAG and DynamoDB. |
 | All | 3 | X | Chatbot Interface. |
