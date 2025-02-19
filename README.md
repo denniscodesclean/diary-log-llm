@@ -25,6 +25,7 @@ So far the insights including:
 | All | 1 | X | Include 'Theme' in QueryParameters when sending GET request to call LLM to support to support filtering on entries by project. |
 | All | 1 | X | Include 'Date Range' in QueryParameters when sending GET request to call LLM to support filtering on entries by entry time. |
 | All | 1 | X | Support deleting previous entries. |
+| Front | 2 | X | Adjust layout for mobile. |
 | LLM | 2 | X | Explore Bedrock Prompt Mamangement, to manage prompt and model selection. |
-| Backend | 2 | X | Explore RAG and DynamoDB. |
+| Back | 2 | X | Explore RAG and DynamoDB. |
 | All | 3 | X | Chatbot Interface. |
