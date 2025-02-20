@@ -19,9 +19,9 @@ bedrock_client = boto3.client("bedrock-runtime", region_name="us-east-2")
 bucket_name = 'diary-log'
 
 # Inference Profile ARN - Haiku 3 is the fastest
-model_id = "arn:aws:bedrock:us-east-2:324037274971:inference-profile/us.anthropic.claude-3-haiku-20240307-v1:0"
+#model_id = "arn:aws:bedrock:us-east-2:324037274971:inference-profile/us.anthropic.claude-3-haiku-20240307-v1:0"
 #model_id = "arn:aws:sagemaker:us-east-2:aws:hub-content/SageMakerPublicHub/Model/deepseek-llm-r1/2.0.1"
-#model_id = "arn:aws:bedrock:us-east-2:324037274971:inference-profile/us.anthropic.claude-3-5-haiku-20241022-v1:0"
+model_id = "arn:aws:bedrock:us-east-2:324037274971:inference-profile/us.anthropic.claude-3-5-haiku-20241022-v1:0"
 #model_id = "arn:aws:bedrock:us-east-2:324037274971:inference-profile/us.anthropic.claude-3-5-sonnet-20240620-v1:0"
 
 def lambda_handler(event, context):
@@ -48,12 +48,14 @@ def lambda_handler(event, context):
             Always ensure the analysis is user-specific and does not mix data between users.
             IMPORTANT: Respond in the same language as the main langauge used in input diary.
             If the diary is in Chinese, respond in Chinese. If in Spanish, respond in Spanish. Do NOT respond in English if the diary is not in English.
+            If user put inappropriate content in entries, use a positive tone to encourage them to log some meaningful logs.
             """
 
         user_prompt = f"""
          <instructions>
         Process the diary provided below and provide an analysis directly using the following JSON structure.
         Ensure the JSON output strictly adheres to the structure provided, do not include any openning text outside of JSON.
+        Put more focus to the most recent diary entry.
         </instructions>       
 
         <JSON Structure>
@@ -69,7 +71,8 @@ def lambda_handler(event, context):
                 "key_concepts": "Provide key concepts for review with brief definitions in this single json value",
                 "questions": "Provide 2 questions for review in this single json value"
             }},
-            "next_study_topic_suggestion": "Suggest the next topic to study and briefly explain how it relates to the user's progress. Use direct, conversational language, starting with 'You'."
+            "next_study_topic_suggestion": "Suggest the next topic to study and briefly explain how it relates to the user's progress.
+            Use direct, conversational language, starting with 'You'. If user explicitly mentioned the next step, provide more suggestion on top of that."
         }}
         </JSON Structure>
 
@@ -103,7 +106,7 @@ def lambda_handler(event, context):
         response_body = response["body"].read().decode("utf-8")  # Read and decode the StreamingBody
         model_response = json.loads(response_body)  # Parse JSON content
         output_text = model_response["content"][0]["text"]
-        print(output_text)
+        #print(output_text)
 
         return {
             'statusCode': 200,
@@ -129,6 +132,8 @@ def lambda_handler(event, context):
             'statusCode': 500,
             'body': json.dumps(f"Error processing request: {str(e)}")
         }
+
+
 
 
 
